@@ -1,4 +1,4 @@
-# Execution times for Bubble Sort Algorithm
+# Execution times for Selection Sort Algorithm
 
 ## Test with 100 lists of size 10000
 
