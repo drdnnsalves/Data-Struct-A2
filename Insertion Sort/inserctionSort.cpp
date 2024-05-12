@@ -1,116 +1,121 @@
 #include <iostream>
 #include <chrono>
-#include <cstdlib> /#include <iostream>
-#include <chrono>
-#include <cstdlib> // para srand, rand e qsort
-#include <ctime>   // para time
-#include <cmath> 
+#include <random>
+#include <cstdlib>
 
-
-using std::cout;
-using std::endl;
-using std::chrono::high_resolution_clock;
-using std::chrono::duration_cast;
-using std::chrono::nanoseconds;
 using namespace std;
 
-
-struct Node {
-    int iPayload;
+typedef struct Node {
+    int iPayload; 
     Node* ptrNext;
     Node* ptrPrev;
-};
+} Node;
+
 // Functions for LinkedLists
 Node* createNode(int);
 void displayList(Node*);
 void insertEnd(Node**, int);
 void deleteList(Node**);
+void swapValue(Node**, Node**);
 void listInsertionSort(Node**);
 
 // Functions for Arrays
+void swapValue(int&, int&);
 void printArray(int[], int);
 void inserctionSort(int[], int);
 
 int main() {
     srand(time(nullptr));
-    
+
     // Lists size and number of lists
     int iSize = 10000;
     int iNumLists = 100;
-    
-    double dSumInsertionSort = 0.0;
-    double dSumSquaredInsertionSort = 0.0;
 
-    for (int i = 0; i < iNumLists; i++) {
-        Node* ptrHeadInsertionSort = nullptr;
+    double dSumInserction = 0;
+    double dSumSquaredInserction = 0;
 
-        // Criar listas aleatórias
+    for (int i = 0; i < iNumLists; ++i) {
+        Node* ptrHeadInserction = nullptr;
+
+        // Create Lists
         for (int j = 0; j < iSize; j++) {
-            int iValue = rand() % 1000 + 1; // Valor aleatório entre 1 e 1000
-            insertEnd(&ptrHeadInsertionSort, iValue);
+            int value = rand() % iSize + 1;
+            insertEnd(&ptrHeadInserction, value);
         }
 
-        // Medir o tempo de execução para Insertion Sort
-        auto startInsertionSort = high_resolution_clock::now();
-        listInsertionSort(&ptrHeadInsertionSort);
-        auto endInsertionSort = high_resolution_clock::now();
-        auto timeDuration = duration_cast<nanoseconds>(endInsertionSort - startInsertionSort);
-        
-        double dTimeInSeconds = timeDuration.count() / 1e9; // Converter para segundos
-        dSumInsertionSort += dTimeInSeconds;
-        dSumSquaredInsertionSort += dTimeInSeconds * dTimeInSeconds;
+        // Execution times for listInserctionSort
+        auto startInserction = chrono::high_resolution_clock::now();
+        listInsertionSort(&ptrHeadInserction);
+        auto endInserction = chrono::high_resolution_clock::now();
+        chrono::duration<double> durationInserction = endInserction - startInserction;
 
-        deleteList(&ptrHeadInsertionSort);
+        double timeInserction = durationInserction.count();
+        dSumInserction += timeInserction;
+        dSumSquaredInserction += timeInserction * timeInserction;
+
+        deleteList(&ptrHeadInserction);
     }
 
-    // Mean for listInsertionSort
-    double dMeanInsertionSort = dSumInsertionSort / iNumLists;
-   
-    // Standard Deviation for listInsertionSort
-    double dVarianceInsertionSort = (dSumSquaredInsertionSort / iNumLists) - (dMeanInsertionSort * dMeanInsertionSort);
-    double dStdDevInsertionSort = sqrt(dVarianceInsertionSort); 
+    // Mean for listInserctionSort
+    double dMeanInserction = dSumInserction / iNumLists;
 
-    cout << "Insertion Sort - mean:               " << dMeanInsertionSort << " segundos" << endl;
-    cout << "Insertion Sort - standard deviation:       " << dStdDevInsertionSort << " segundos" << endl;
+    // Standard Deviation for listInserctionSort
+    double dVarianceInserction = (dSumSquaredInserction / iNumLists) - (dMeanInserction * dMeanInserction);
+    double dStdDevInserction = sqrt(dVarianceInserction);
+
+    cout << "listInserctionSort mean:               " << dMeanInserction << " seconds" << endl;
+    cout << "listInserctionSort standard deviation: " << dStdDevInserction << " seconds" << endl << endl;
 
     return 0;
 }
 
+// List Functions
+
 Node* createNode(int iValue) {
-    Node* temp = new Node; // Alocação de memória com new
+    Node* temp = (Node*) malloc(sizeof(Node));
     temp->iPayload = iValue;
     temp->ptrNext = nullptr;
     temp->ptrPrev = nullptr;
+    
     return temp;
 }
 
 void displayList(Node* node) {
     if (node == nullptr) {
-        cout << "Lista vazia: não é possível realizar displayList" << endl;
+        cout << "Empty list" << endl;
         return;
     }
-
-    cout << "Payload: ";
-    while (node != nullptr) {
-        cout << node->iPayload << " ";
-        node = node->ptrNext;
+    
+    if (node->ptrPrev != nullptr) {
+        cout << "The element is in the middle or at the end of the list." << endl;
+        return;
     }
+    
+    Node* temp = node;
+    cout << "Payload: ";
+    
+    while (temp != nullptr) {
+        cout <<  temp->iPayload << " ";
+        temp = temp->ptrNext;
+    }
+    
     cout << endl;
 }
 
 void insertEnd(Node** head, int iValue) {
     Node* newNode = createNode(iValue);
+
     if (*head == nullptr) {
-        *head = newNode;
+        *head = newNode; 
         return;
     }
-
+    
     Node* temp = *head;
     while (temp->ptrNext != nullptr)
         temp = temp->ptrNext;
-
-    temp->ptrNext = newNode;
+    
     newNode->ptrPrev = temp;
+    temp->ptrNext = newNode;
 }
 
 void deleteList(Node** head) {
@@ -126,188 +131,77 @@ void deleteList(Node** head) {
     *head = nullptr;
 }
 
+void swapValue(Node** Value_1, Node** Value_2) {
+    int temp = (*Value_1)->iPayload;
+    (*Value_1)->iPayload = (*Value_2)->iPayload;
+    (*Value_2)->iPayload = temp;
+}
+
 void listInsertionSort(Node** head) {
-    if (*head == nullptr || (*head)->ptrNext == nullptr) // Lista vazia ou apenas um elemento
+    if (*head == nullptr || (*head)->ptrNext == nullptr)
         return;
 
-    Node* sorted = nullptr; // Lista ordenada
-    Node* current = *head;  // Nó atual
+    Node* sorted = nullptr;
+    Node* current = *head;  
 
     while (current != nullptr) {
-        Node* next = current->ptrNext; // Próximo nó a ser processado
+        Node* next = current->ptrNext; 
         if (sorted == nullptr || sorted->iPayload >= current->iPayload) {
-            // Insere no início da lista ordenada
             current->ptrNext = sorted;
             current->ptrPrev = nullptr;
             if (sorted != nullptr)
                 sorted->ptrPrev = current;
+
             sorted = current;
-        } else {
-            // Procura a posição correta na lista ordenada
+        } 
+        else {
             Node* temp = sorted;
             while (temp->ptrNext != nullptr && temp->ptrNext->iPayload < current->iPayload)
                 temp = temp->ptrNext;
-            // Insere o nó após temp
+
             current->ptrNext = temp->ptrNext;
             current->ptrPrev = temp;
             if (temp->ptrNext != nullptr)
                 temp->ptrNext->ptrPrev = current;
+
             temp->ptrNext = current;
         }
-        current = next; // Avança para o próximo nó
+        current = next;
     }
 
-    // Atualiza a cabeça da lista
     *head = sorted;
+}
+
+
+// Array Functions
+
+void swapValue(int& irefValue_1, int& irefValue_2) {
+    int iTemp = irefValue_1;
+    irefValue_1 = irefValue_2;
+    irefValue_2 = iTemp;
+    
 }
 
 void printArray(int arriNumbers[], int iLenght) {
-    for(int i = 0; i < iLenght; i++) cout<<arriNumbers[i] << " ";
+    for(int i = 0; i < iLenght; i++) 
+        cout<<arriNumbers[i] << " ";
+
     cout << endl;
 }
 
-void inserctionSort(int arriNumbers[], int iLenght)
-{
+void inserctionSort(int arriNumbers[], int iLenght) {
     int iInsertValue = 0; 
     int iInnerLoop = 0;
     
-    for (int iOuterLoop = 1; iOuterLoop < iLenght; iOuterLoop++)
-    {
+    for (int iOuterLoop = 1; iOuterLoop < iLenght; iOuterLoop++) {
         iInsertValue = arriNumbers[iOuterLoop];
         iInnerLoop = iOuterLoop - 1;
         
-        while (iInsertValue < arriNumbers[iInnerLoop] && iInnerLoop >= 0)
-        {
+        while (iInsertValue < arriNumbers[iInnerLoop] && iInnerLoop >= 0) {
             arriNumbers[iInnerLoop + 1] = arriNumbers[iInnerLoop];
             iInnerLoop--;
         }
+
         arriNumbers[iInnerLoop + 1] = iInsertValue;
-
     }
-}/ para srand e rand
-#include <ctime>   // para time
-
-using std::cout;
-using std::endl;
-
-using std::chrono::high_resolution_clock;
-using std::chrono::duration_cast;
-using std::chrono::nanoseconds;
-
-struct Node {
-    int iPayload;
-    Node* ptrNext;
-    Node* ptrPrev;
-};
-
-Node* createNode(int);
-void displayList(Node*);
-void insertEnd(Node**, int);
-void listInsertionSort(Node**); // Corrigido o nome da função
-
-int main() {
-    srand(time(nullptr)); // Seed para números aleatórios
-
-    // Tamanhos das listas a serem testadas
-    int iSizes[] = {1000, 5000, 10000, 15000};
-
-    cout << "Teste para algoritmo insertionSort" << endl << endl;
-
-    for (int iSize : iSizes) {
-        Node* head = nullptr;
-
-        // Criar listas aleatórias
-        for (int i = 0; i < iSize; i++) {
-            int iValue = rand() % 1000 + 1; // Valor aleatório entre 1 e 1000
-            insertEnd(&head, iValue);
-        }
-
-        // Medir o tempo de execução para insertionSort
-        auto timeStart = high_resolution_clock::now();
-        listInsertionSort(&head);
-        auto timeEnd = high_resolution_clock::now();
-        auto timeDuration = duration_cast<nanoseconds>(timeEnd - timeStart);
-        cout << "Tempo para insertionSort com lista de tamanho " << iSize << ": " << timeDuration.count() << " nanosegundos" << endl;
-
-        // Liberar a memória alocada para a lista
-        Node* temp = head;
-        while (temp != nullptr) {
-            Node* next = temp->ptrNext;
-            delete temp;
-            temp = next;
-        }
-    }
-    return 0;
-}
-
-Node* createNode(int iValue) {
-    Node* temp = new Node; // Alocação de memória com new
-    temp->iPayload = iValue;
-    temp->ptrNext = nullptr;
-    temp->ptrPrev = nullptr;
-    return temp;
-}
-
-void displayList(Node* node) {
-    if (node == nullptr) {
-        cout << "Lista vazia: não é possível realizar displayList" << endl;
-        return;
-    }
-
-    cout << "Payload: ";
-    while (node != nullptr) {
-        cout << node->iPayload << " ";
-        node = node->ptrNext;
-    }
-    cout << endl;
-}
-
-void insertEnd(Node** head, int iValue) {
-    Node* newNode = createNode(iValue);
-    if (*head == nullptr) {
-        *head = newNode;
-        return;
-    }
-
-    Node* temp = *head;
-    while (temp->ptrNext != nullptr)
-        temp = temp->ptrNext;
-
-    temp->ptrNext = newNode;
-    newNode->ptrPrev = temp;
-}
-
-void listInsertionSort(Node** head) {
-    if (*head == nullptr || (*head)->ptrNext == nullptr) // Lista vazia ou apenas um elemento
-        return;
-
-    Node* sorted = nullptr; // Lista ordenada
-    Node* current = *head;  // Nó atual
-
-    while (current != nullptr) {
-        Node* next = current->ptrNext; // Próximo nó a ser processado
-        if (sorted == nullptr || sorted->iPayload >= current->iPayload) {
-            // Insere no início da lista ordenada
-            current->ptrNext = sorted;
-            current->ptrPrev = nullptr;
-            if (sorted != nullptr)
-                sorted->ptrPrev = current;
-            sorted = current;
-        } else {
-            // Procura a posição correta na lista ordenada
-            Node* temp = sorted;
-            while (temp->ptrNext != nullptr && temp->ptrNext->iPayload < current->iPayload)
-                temp = temp->ptrNext;
-            // Insere o nó após temp
-            current->ptrNext = temp->ptrNext;
-            current->ptrPrev = temp;
-            if (temp->ptrNext != nullptr)
-                temp->ptrNext->ptrPrev = current;
-            temp->ptrNext = current;
-        }
-        current = next; // Avança para o próximo nó
-    }
-
-    // Atualiza a cabeça da lista
-    *head = sorted;
 }
