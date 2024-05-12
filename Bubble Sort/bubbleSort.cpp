@@ -44,7 +44,7 @@ int main() {
 
         // Create Lists
         for (int j = 0; j < iSize; j++) {
-            int value = rand() % 1000 + 1;
+            int value = rand() % iSize + 1;
             insertEnd(&ptrHeadBubbleSort, value);
             insertEnd(&ptrHeadOptBubbleSort, value);
         }
@@ -97,6 +97,8 @@ int main() {
 
     return 0;
 }
+
+// List Functions
 
 Node* createNode(int iValue) {
     Node* temp = (Node*)malloc(sizeof(Node));
@@ -199,6 +201,8 @@ void optimizedListBubbleSort(Node** head, int iLength) {
         }
     }
 }
+
+// Array Functions
 
 void swapValue(int& irefValue_1, int& irefValue_2) {
     int iTemp = irefValue_1;
