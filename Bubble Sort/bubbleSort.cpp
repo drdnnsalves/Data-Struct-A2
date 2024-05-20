@@ -19,7 +19,7 @@ int main() {
 
         // Create Lists
         for (int j = 0; j < iSize; j++) {
-            int value = rand() % iSize + 1;
+            int value = rand() % 100;
             insertEnd(&ptrBubble, value);
             insertEnd(&ptrOptBubble, value);
         }

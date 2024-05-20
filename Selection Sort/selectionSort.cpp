@@ -19,7 +19,7 @@ int main() {
 
         // Create Lists
         for (int j = 0; j < iSize; j++) {
-            int iValue = rand() % iSize + 1;
+            int iValue = rand() % 100;
             insertEnd(&ptrSelection, iValue);
             insertEnd(&ptrOptSelection, iValue);
         }
