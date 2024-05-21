@@ -1,10 +1,13 @@
 #include <iostream>
-#include "functionsInsertion.h"
+#include "functionsBubble.h"
 #include <cstdlib>
 
 using namespace std;
 
-namespace InsertionFunctions {
+
+// List Functions
+
+namespace BubbleFunctions {
 
     template<typename T>
     Node<T>* createNode(T value) {
@@ -12,7 +15,7 @@ namespace InsertionFunctions {
         ptrTemp->payload = value;
         ptrTemp->ptrNext = nullptr;
         ptrTemp->ptrPrev = nullptr;
-            
+        
         return ptrTemp;
     }
 
@@ -38,7 +41,6 @@ namespace InsertionFunctions {
         
         cout << endl;
     }
-
 
     template<typename T>
     void insertEnd(Node<T>** ptrHead, T value) {
@@ -78,40 +80,42 @@ namespace InsertionFunctions {
         (*ptrNode2)->payload = tempPayload;
     }
 
+
     template<typename T>
-    void listInsertionSort(Node<T>** ptrHead) {
-        if (*ptrHead == nullptr || (*ptrHead)->ptrNext == nullptr)
-            return;
-
-        Node<T>* ptrSorted = nullptr;
-        Node<T>* ptrCurrent = *ptrHead;  
-
-        while (ptrCurrent != nullptr) {
-            Node<T>* ptrNext = ptrCurrent->ptrNext; 
-            if (ptrSorted == nullptr || ptrSorted->payload >= ptrCurrent->payload) {
-                ptrCurrent->ptrNext = ptrSorted;
-                ptrCurrent->ptrPrev = nullptr;
-                if (ptrSorted != nullptr)
-                    ptrSorted->ptrPrev = ptrCurrent;
-
-                ptrSorted = ptrCurrent;
-            } 
-            else {
-                Node<T>* ptrTemp = ptrSorted;
-                while (ptrTemp->ptrNext != nullptr && ptrTemp->ptrNext->payload < ptrCurrent->payload)
-                    ptrTemp = ptrTemp->ptrNext;
-
-                ptrCurrent->ptrNext = ptrTemp->ptrNext;
-                ptrCurrent->ptrPrev = ptrTemp;
-                if (ptrTemp->ptrNext != nullptr)
-                    ptrTemp->ptrNext->ptrPrev = ptrCurrent;
-
-                ptrTemp->ptrNext = ptrCurrent;
+    void listBubbleSort(Node<T>** ptrHead, int iLength) {
+        Node<T>* ptrCurrent = *ptrHead;
+        
+        for (int iOuterLoop = 0; iOuterLoop < iLength - 1; iOuterLoop++) {
+            ptrCurrent = *ptrHead;
+            for (int iInnerLoop = 0; iInnerLoop < iLength - iOuterLoop - 1; iInnerLoop++) {
+                if (ptrCurrent->payload > ptrCurrent->ptrNext->payload) {
+                    swapValue(&ptrCurrent, &(ptrCurrent->ptrNext));
+                }
+                ptrCurrent = ptrCurrent->ptrNext;
             }
-            ptrCurrent = ptrNext;
         }
+    }
 
-        *ptrHead = ptrSorted;
+    template<typename T>
+    void optimizedListBubbleSort(Node<T>** ptrHead, int iLength) {
+        Node<T>* ptrCurrent = *ptrHead;
+        bool bUnordered = false;
+        
+        for (int iOuterLoop = 0; iOuterLoop < iLength - 1; iOuterLoop++) {
+            ptrCurrent = *ptrHead;
+            bUnordered = false;
+            
+            for (int iInnerLoop = 0; iInnerLoop < iLength - iOuterLoop - 1; iInnerLoop++) {
+                if (ptrCurrent->payload > ptrCurrent->ptrNext->payload) {
+                    swapValue(&ptrCurrent, &(ptrCurrent->ptrNext));
+                    bUnordered = true;
+                }
+                ptrCurrent = ptrCurrent->ptrNext;
+            }
+
+            if (!bUnordered)
+                break;
+        }
     }
 
 }

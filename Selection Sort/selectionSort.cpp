@@ -2,7 +2,7 @@
 #include <chrono>
 #include <random>
 #include <cstdlib>
-#include "functions.h"
+#include "functionsSelection.h"
 
 using namespace std;
 
@@ -14,34 +14,34 @@ int main() {
     int iNumLists = 100;
 
     for (int i = 0; i < iNumLists; ++i) {
-        Node* ptrSelection = nullptr;
-        Node* ptrOptSelection = nullptr;
+        SelectionFunctions::Node<int>* ptrSelection = nullptr;
+        SelectionFunctions::Node<int>* ptrOptSelection = nullptr;
 
         // Create Lists
         for (int j = 0; j < iSize; j++) {
             int iValue = rand() % 100;
-            insertEnd(&ptrSelection, iValue);
-            insertEnd(&ptrOptSelection, iValue);
+            SelectionFunctions::insertEnd(&ptrSelection, iValue);
+            SelectionFunctions::insertEnd(&ptrOptSelection, iValue);
         }
 
         // Execution times for listSelectionSort
-        auto startBubbleSort = chrono::high_resolution_clock::now();
-        listSelectionSort(&ptrSelection, iSize);
-        auto endBubbleSort = chrono::high_resolution_clock::now();
-        chrono::duration<double> durationBubbleSort = endBubbleSort - startBubbleSort;
+        auto startSelectionSort = chrono::high_resolution_clock::now();
+        SelectionFunctions::listSelectionSort(&ptrSelection, iSize);
+        auto endSelectionSort = chrono::high_resolution_clock::now();
+        chrono::duration<double> durationSelectionSort = endSelectionSort - startSelectionSort;
 
         // Execution times for optimizedListSelectionSort
-        auto startOptBubbleSort = chrono::high_resolution_clock::now();
-        optimizedListSelectionSort(&ptrOptSelection, iSize);
-        auto endOptBubbleSort = chrono::high_resolution_clock::now();
-        chrono::duration<double> durationOptBubbleSort = endOptBubbleSort - startOptBubbleSort;
+        auto startOptSelectionSort = chrono::high_resolution_clock::now();
+        SelectionFunctions::optimizedListSelectionSort(&ptrOptSelection, iSize);
+        auto endOptSelectionSort = chrono::high_resolution_clock::now();
+        chrono::duration<double> durationOptSelectionSort = endOptSelectionSort - startOptSelectionSort;
 
         // Printing execution times
-        cout << "listSelectionSort, list number " << i << ":  " << durationBubbleSort.count() << " seconds";
-        cout << " // optimizedListSelectionSort, list number "<< i << ":" << durationOptBubbleSort.count() << " seconds" << endl;
+        cout << "listSelectionSort, list number " << i << ":  " << durationSelectionSort.count() << " seconds";
+        cout << " // optimizedListSelectionSort, list number "<< i << ":" << durationOptSelectionSort.count() << " seconds" << endl;
 
-        deleteList(&ptrSelection);
-        deleteList(&ptrOptSelection);
+        SelectionFunctions::deleteList(&ptrSelection);
+        SelectionFunctions::deleteList(&ptrOptSelection);
     }
     return 0;
 }

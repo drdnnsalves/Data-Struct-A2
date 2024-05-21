@@ -3,14 +3,16 @@
 
 #include <iostream>
 
-namespace InsertionFunctions {
+namespace SelectionFunctions {
 
     template<typename T>
     struct Node {
-        T payload; 
+        T payload;
         Node* ptrNext;
         Node* ptrPrev;
     };
+
+    // Functions for LinkedLists
 
     template<typename T>
     Node<T>* createNode(T value);
@@ -28,10 +30,13 @@ namespace InsertionFunctions {
     void swapValue(Node<T>**, Node<T>**);
 
     template<typename T>
-    void listInsertionSort(Node<T>**);
+    void listSelectionSort(Node<T>**, int);
+
+    template<typename T>
+    void optimizedListSelectionSort(Node<T>**, int);
 
 }
 
-#include "functionsInsertion.cpp"
+#include "functionsSelection.cpp"
 
 #endif

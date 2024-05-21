@@ -14,24 +14,25 @@ int main() {
     int iNumLists = 100;
 
     for (int i = 0; i < iNumLists; ++i) {
-        Node* ptrSelection = nullptr;
+        InsertionFunctions::Node<int>* ptrSelection = nullptr;
 
         // Create Lists
         for (int j = 0; j < iSize; j++) {
             int iValue = rand() % 100;
-            insertEnd(&ptrSelection, iValue);
+            InsertionFunctions::insertEnd(&ptrSelection, iValue);
         }
 
         // Execution times for listInsertionSort
         auto startSelectionSort = chrono::high_resolution_clock::now();
-        listInsertionSort(&ptrSelection);
+        InsertionFunctions::listInsertionSort(&ptrSelection);
         auto endSelectionSort = chrono::high_resolution_clock::now();
         chrono::duration<double> durationSelectionSort = endSelectionSort - startSelectionSort;
 
         // Printing execution times
         cout << "listInsertionSort, list number " << i << ":  " << durationSelectionSort.count() << " seconds" << endl;
 
-        deleteList(&ptrSelection);
+        InsertionFunctions::listInsertionSort(&ptrSelection);
+        InsertionFunctions::deleteList(&ptrSelection);
     }
     return 0;
 }

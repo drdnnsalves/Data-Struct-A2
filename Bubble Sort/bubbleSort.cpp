@@ -2,7 +2,7 @@
 #include <chrono>
 #include <random>
 #include <cstdlib>
-#include "functions.h"
+#include "functionsBubble.h"
 
 using namespace std;
 
@@ -14,25 +14,25 @@ int main() {
     int iNumLists = 100;
 
     for (int i = 0; i < iNumLists; ++i) {
-        Node* ptrBubble = nullptr;
-        Node* ptrOptBubble = nullptr;
+        BubbleFunctions::Node<int>* ptrBubble = nullptr;
+        BubbleFunctions::Node<int>* ptrOptBubble = nullptr;
 
         // Create Lists
         for (int j = 0; j < iSize; j++) {
             int value = rand() % 100;
-            insertEnd(&ptrBubble, value);
-            insertEnd(&ptrOptBubble, value);
+            BubbleFunctions::insertEnd(&ptrBubble, value);
+            BubbleFunctions::insertEnd(&ptrOptBubble, value);
         }
 
         // Execution times for listBubbleSort
         auto startBubbleSort = chrono::high_resolution_clock::now();
-        listBubbleSort(&ptrBubble, iSize);
+        BubbleFunctions::listBubbleSort(&ptrBubble, iSize);
         auto endBubbleSort = chrono::high_resolution_clock::now();
         chrono::duration<double> durationBubbleSort = endBubbleSort - startBubbleSort;
 
         // Execution times for optimizedListBubbleSort
         auto startOptBubbleSort = chrono::high_resolution_clock::now();
-        optimizedListBubbleSort(&ptrOptBubble, iSize);
+        BubbleFunctions::optimizedListBubbleSort(&ptrOptBubble, iSize);
         auto endOptBubbleSort = chrono::high_resolution_clock::now();
         chrono::duration<double> durationOptBubbleSort = endOptBubbleSort - startOptBubbleSort;
 
@@ -40,8 +40,8 @@ int main() {
         cout << "listBubbleSort, list number " << i << ":  " << durationBubbleSort.count() << " seconds";
         cout << " // optimizedListBubbleSort, list number "<< i << ":" << durationOptBubbleSort.count() << " seconds" << endl;
 
-        deleteList(&ptrBubble);
-        deleteList(&ptrOptBubble);
+        BubbleFunctions::deleteList(&ptrBubble);
+        BubbleFunctions::deleteList(&ptrOptBubble);
     }
     return 0;
 }

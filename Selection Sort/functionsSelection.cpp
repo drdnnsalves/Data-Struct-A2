@@ -1,19 +1,19 @@
 #include <iostream>
-#include "functionsInsertion.h"
+#include "functionsSelection.h"
 #include <cstdlib>
 
 using namespace std;
 
-namespace InsertionFunctions {
+namespace SelectionFunctions {
 
     template<typename T>
-    Node<T>* createNode(T value) {
-        Node<T>* ptrTemp = (Node<T>*)malloc(sizeof(Node<T>));
-        ptrTemp->payload = value;
-        ptrTemp->ptrNext = nullptr;
-        ptrTemp->ptrPrev = nullptr;
-            
-        return ptrTemp;
+    Node<T>* createNode(int iValue) {
+        Node<T>* temp = (Node<T>*)malloc(sizeof(Node<T>));
+        temp->iPayload = iValue;
+        temp->ptrNext = nullptr;
+        temp->ptrPrev = nullptr;
+        
+        return temp;
     }
 
     template<typename T>
@@ -39,7 +39,6 @@ namespace InsertionFunctions {
         cout << endl;
     }
 
-
     template<typename T>
     void insertEnd(Node<T>** ptrHead, T value) {
         Node<T>* ptrNewNode = createNode(value);
@@ -60,7 +59,7 @@ namespace InsertionFunctions {
     template<typename T>
     void deleteList(Node<T>** ptrHead) {
         Node<T>* ptrCurrent = *ptrHead;
-        Node<T>* ptrNext = nullptr;
+        Node<T>* ptrNext;
 
         while (ptrCurrent != nullptr) {
             ptrNext = ptrCurrent->ptrNext;
@@ -79,39 +78,39 @@ namespace InsertionFunctions {
     }
 
     template<typename T>
-    void listInsertionSort(Node<T>** ptrHead) {
-        if (*ptrHead == nullptr || (*ptrHead)->ptrNext == nullptr)
-            return;
+    void listSelectionSort(Node<T>** ptrHead, int iLength) {
+        for (int iOuterLoop = 0; iOuterLoop < iLength; iOuterLoop++) {
+            Node<T>* ptrCurrent = *ptrHead;
 
-        Node<T>* ptrSorted = nullptr;
-        Node<T>* ptrCurrent = *ptrHead;  
-
-        while (ptrCurrent != nullptr) {
-            Node<T>* ptrNext = ptrCurrent->ptrNext; 
-            if (ptrSorted == nullptr || ptrSorted->payload >= ptrCurrent->payload) {
-                ptrCurrent->ptrNext = ptrSorted;
-                ptrCurrent->ptrPrev = nullptr;
-                if (ptrSorted != nullptr)
-                    ptrSorted->ptrPrev = ptrCurrent;
-
-                ptrSorted = ptrCurrent;
-            } 
-            else {
-                Node<T>* ptrTemp = ptrSorted;
-                while (ptrTemp->ptrNext != nullptr && ptrTemp->ptrNext->payload < ptrCurrent->payload)
-                    ptrTemp = ptrTemp->ptrNext;
-
-                ptrCurrent->ptrNext = ptrTemp->ptrNext;
-                ptrCurrent->ptrPrev = ptrTemp;
-                if (ptrTemp->ptrNext != nullptr)
-                    ptrTemp->ptrNext->ptrPrev = ptrCurrent;
-
-                ptrTemp->ptrNext = ptrCurrent;
+            for (int iInnerLoop = iOuterLoop + 1; iInnerLoop < iLength; iInnerLoop++) {
+                if (ptrCurrent->payload > ptrCurrent->ptrNext->payload) {
+                    swapValue(&ptrCurrent, &(ptrCurrent->ptrNext));
+                }
+                ptrCurrent = ptrCurrent->ptrNext;
             }
-            ptrCurrent = ptrNext;
         }
+    }
 
-        *ptrHead = ptrSorted;
+    template<typename T>
+    void optimizedListSelectionSort(Node<T>** ptrHead, int iLength) {
+        Node<T>* ptrCurrent; 
+        Node<T>* ptrMin;
+
+        for (int i = 0; i < iLength - 1; i++) {
+            ptrCurrent = *ptrHead;
+            ptrMin = ptrCurrent;
+
+            for (int j = i + 1; j < iLength; j++) {
+                if (ptrCurrent->payload > ptrCurrent->ptrNext->payload) {
+                    ptrMin = ptrCurrent->ptrNext;
+                }
+                ptrCurrent = ptrCurrent->ptrNext;
+            }
+
+            if (ptrMin != ptrCurrent) {
+                swapValue(&ptrMin, &ptrCurrent);
+            }
+        }
     }
 
 }
