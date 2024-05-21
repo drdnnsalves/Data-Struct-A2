@@ -1,0 +1,57 @@
+ShellSort is an efficient sorting algorithm that is a generalization of insertion sort. It was invented by Donald Shell in 1959.
+To understand the concept of the ShellSort algorithm, one must understand the concept of 'gap'.
+ A 'gap' is a sequence of numbers created during the execution of the code. There are various ways to construct this sequence.
+Some people use the sequence proposed by Shell: (n/2, n/2, ...), where 'n' is the size of the list.
+Some use proposed by Hibbard: (2^{k} - 1).
+We are going to use the one proposed by Knuth: ( (3^(k) -1)/2 ).
+Our sequence of gaps is of the form: (1, 4, 13, 40, 121, ...)
+
+Here goes a sorting of a list of size 10
+
+
+List before sorting: 
+Payload: 70 81 0 50 28 96 72 31 62 28 
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
+Swapping elements of the list with Gap = 4: 
+
+Payload: 28 81 0 50 70 96 72 31 62 28 
+
+Payload: 28 81 0 31 70 96 72 50 62 28 
+
+Payload: 28 81 0 31 62 96 72 50 70 28 
+
+Payload: 28 81 0 31 62 28 72 50 70 96 
+
+Payload: 28 28 0 31 62 81 72 50 70 96 
+
+Swapping elements of the list with Gap = 1: 
+
+Payload: 28 0 28 31 62 81 72 50 70 96 
+
+Payload: 0 28 28 31 62 81 72 50 70 96 
+
+Payload: 0 28 28 31 62 72 81 50 70 96 
+
+Payload: 0 28 28 31 62 72 50 81 70 96 
+
+Payload: 0 28 28 31 62 50 72 81 70 96 
+
+Payload: 0 28 28 31 50 62 72 81 70 96 
+
+Payload: 0 28 28 31 50 62 72 70 81 96 
+
+Payload: 0 28 28 31 50 62 70 72 81 96 
+
+Payload: 0 28 28 31 50 62 70 72 81 96 
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
+List sorted: 
+
+Payload: 0 28 28 31 50 62 70 72 81 96 
+
+
+Our first Gap was 4. We go to position (Gap + 1) of the List and switch positions with the position 1.
+If the Value of the Node in position (Gap + 1) is greater, we do the swap and go 1 node front.
+After doing this, we reduce the value of the Gap. In our example, we go to Gap = 1.
+We do the same. Go to position (Gap + 1), do th eswap with the value behind, and go one front.
+Observation: With Gap = 1, we have InsertionSort.
