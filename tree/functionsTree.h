@@ -10,7 +10,7 @@ namespace TreeFunctions {
         T payload;
         Node* ptrLeft;
         Node* ptrRight;
-        Node* next;
+        Node* ptrNext;
     };
 
     template<typename T>
@@ -24,6 +24,16 @@ namespace TreeFunctions {
 
     template<typename T>
     void bfsTraversal(Node<T>* ptrStartingNode);
+
+    template<typename T>
+    void traversePreOrder(Node<T>* ptrStartingNode);
+
+    template<typename T>
+    void traverseInOrder(Node<T>* ptrStartingNode);
+
+    template<typename T>
+    void traversePostOrder(Node<T>* ptrStartingNode);
+
 
 }
 

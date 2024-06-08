@@ -16,8 +16,6 @@ int main() {
     ptrRoot = insertNode(ptrRoot, 51);
     ptrRoot = insertNode(ptrRoot, 171);
 
-    cout << "Tree Height: " << treeHeight(ptrRoot) << endl;
-
     cout << "BFS Traversal: ";
     bfsTraversal(ptrRoot);
     cout << endl;

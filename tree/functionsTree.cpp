@@ -7,7 +7,7 @@ namespace TreeFunctions {
 
     template<typename T>
     Node<T>* createNode(T value) {
-        Node<T>* ptrTemp = new Node<T>;
+        Node<T>* ptrTemp = (Node<T>*) malloc(sizeof(Node<T>));
 
         if(ptrTemp == nullptr) {
             cerr << "Error in createNode: memory allocation failed" << endl;
@@ -17,7 +17,7 @@ namespace TreeFunctions {
         ptrTemp->payload = value;
         ptrTemp->ptrLeft = nullptr;
         ptrTemp->ptrRight = nullptr;
-        ptrTemp->next = nullptr;
+        ptrTemp->ptrNext = nullptr;
 
         return ptrTemp;
     }
@@ -54,24 +54,51 @@ namespace TreeFunctions {
         if (ptrStartingNode == nullptr)
             return;
 
-        Node<T>* front = nullptr;
-        Node<T>* rear = nullptr;
+        Node<T>* ptrFront = nullptr;
+        Node<T>* ptrRear = nullptr;
 
-        rear = front = ptrStartingNode;
+        ptrRear = ptrFront = ptrStartingNode;
 
-        while (front != nullptr) {
-            cout << front->payload << " ";
+        while  (ptrFront != nullptr) {
+            cout << ptrFront->payload << " ";
 
-            if (front->ptrLeft != nullptr) {
-                rear->next = front->ptrLeft;
-                rear = rear->next;
+            if  (ptrFront->ptrLeft != nullptr) {
+                ptrRear->ptrNext = ptrFront->ptrLeft;
+                ptrRear = ptrRear->ptrNext;
             }
-            if (front->ptrRight != nullptr) {
-                rear->next = front->ptrRight;
-                rear = rear->next;
+            if  (ptrFront->ptrRight != nullptr) {
+                ptrRear->ptrNext = ptrFront->ptrRight;
+                ptrRear = ptrRear->ptrNext;
             }
 
-            front = front->next;
+            ptrFront = ptrFront->ptrNext;
+        }
+    }
+
+    template<typename T>
+    void traversePreOrder(Node<T>* ptrStartingNode) {
+        if(ptrStartingNode != nullptr) {
+            cout << " " << ptrStartingNode->iPayload;
+            traversePreOrder(ptrStartingNode->ptrLeft);
+            traversePreOrder(ptrStartingNode->ptrRight);
+        }
+    }
+
+    template<typename T>
+    void traverseInOrder(Node<T>* ptrStartingNode) {
+        if(ptrStartingNode != nullptr) {
+            traverseInOrder(ptrStartingNode->ptrLeft);
+            cout << " " << ptrStartingNode->iPayload;
+            traverseInOrder(ptrStartingNode->ptrRight);
+        }
+    }
+
+    template<typename T>
+    void traversePostOrder(Node<T>* ptrStartingNode) {
+        if(ptrStartingNode != nullptr) {
+            traversePostOrder(ptrStartingNode->ptrLeft);
+            traversePostOrder(ptrStartingNode->ptrRight);
+            cout << " " << ptrStartingNode->iPayload;
         }
     }
 
