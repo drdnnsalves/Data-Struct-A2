@@ -1,5 +1,5 @@
 #include "functionsTree.h"
-#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -7,16 +7,19 @@ namespace TreeFunctions {
 
     template<typename T>
     Node<T>* createNode(T value) {
-        Node<T>* ptrTemp = (Node<T>*) malloc(sizeof(Node<T>));
+        Node<T>* ptrTemp = new Node<T>;
 
         if(ptrTemp == nullptr) {
-            cerr << "Error in creatNode: malloc" << endl;
+            cerr << "Error in createNode: memory allocation failed" << endl;
             exit(1);
         } 
 
         ptrTemp->payload = value;
         ptrTemp->ptrLeft = nullptr;
         ptrTemp->ptrRight = nullptr;
+        ptrTemp->next = nullptr;
+
+        return ptrTemp;
     }
 
     template<typename T>
@@ -24,11 +27,11 @@ namespace TreeFunctions {
         if (startNode == nullptr) {
             return createNode(value);
         }
-        if (value< startNode -> payload) {
-            startNode -> ptrLeft = insertNode(startNode -> ptrLeft, value); 
+        if (value < startNode->payload) {
+            startNode->ptrLeft = insertNode(startNode->ptrLeft, value); 
         }
         else {
-            startNode -> ptrRight = insertNode(startNode -> ptrRight, value); 
+            startNode->ptrRight = insertNode(startNode->ptrRight, value); 
         }
 
         return startNode; 
@@ -39,43 +42,37 @@ namespace TreeFunctions {
         if(ptrStartingNode == nullptr)
             return 0;
         else {
-            int iLeftHeight = treeHeight(ptrStartingNode->ptrLeft);
-            int iRightHeight = treeHeight(ptrStartingNode->ptrRight);
+            int leftHeight = treeHeight(ptrStartingNode->ptrLeft);
+            int rightHeight = treeHeight(ptrStartingNode->ptrRight);
 
-            return max(iLeftHeight, iRightHeight) + 1;
+            return 1 + max(leftHeight, rightHeight);
         }
     }
 
     template<typename T>
     void bfsTraversal(Node<T>* ptrStartingNode) {
-    if(ptrStartingNode == nullptr)
-        return;
+        if (ptrStartingNode == nullptr)
+            return;
 
-        // Parte 1: Alterar para lista encadeada
-        Node<T>* nodeQueue[100];
-        int iQueueFront = 0;
-        int iQueueRear = 0;
+        Node<T>* front = nullptr;
+        Node<T>* rear = nullptr;
 
-        nodeQueue[iQueueRear] = ptrStartingNode;
-        iQueueRear++;
+        rear = front = ptrStartingNode;
 
-        while(iQueueFront < iQueueRear) {
-            Node<T>* currentNode = nodeQueue[iQueueFront];
-            iQueueFront++;
+        while (front != nullptr) {
+            cout << front->payload << " ";
 
-            cout << currentNode->payload << " ";
-
-            if(currentNode->ptrLeft != nullptr) {
-                nodeQueue[iQueueRear] = currentNode->ptrLeft;
-                iQueueRear++;
+            if (front->ptrLeft != nullptr) {
+                rear->next = front->ptrLeft;
+                rear = rear->next;
+            }
+            if (front->ptrRight != nullptr) {
+                rear->next = front->ptrRight;
+                rear = rear->next;
             }
 
-            if(currentNode->ptrRight != nullptr) {
-                nodeQueue[iQueueRear] = currentNode->ptrRight;
-                iQueueRear++;
-            }
+            front = front->next;
         }
-    }   
-
+    }
 
 }

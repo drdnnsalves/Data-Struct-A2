@@ -10,6 +10,7 @@ namespace TreeFunctions {
         T payload;
         Node* ptrLeft;
         Node* ptrRight;
+        Node* next;
     };
 
     template<typename T>
@@ -25,7 +26,6 @@ namespace TreeFunctions {
     void bfsTraversal(Node<T>* ptrStartingNode);
 
 }
-
 
 #include "functionsTree.cpp"
 
