@@ -16,11 +16,18 @@ int main() {
     ptrRoot = insertNode(ptrRoot, 51);
     ptrRoot = insertNode(ptrRoot, 171);
 
-    cout << "BFS Traversal: ";
-    bfsTraversal(ptrRoot);
+    cout << "Finding number 51 with traversePreOrder: ";
+    traversePreOrder(ptrRoot, 51);
     cout << endl;
 
-    cout << "Tree Height: " << treeHeight(ptrRoot) << endl;
+    cout << "Finding number 51 with traverseInOrder: ";
+    traverseInOrder(ptrRoot, 51);
+    cout << endl;
+
+    cout << "Finding number 51 with traversePostOrder: ";
+    traversePostOrder(ptrRoot, 51);
+    cout << endl;
+
 
     return 0;
 }

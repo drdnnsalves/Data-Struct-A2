@@ -50,7 +50,7 @@ namespace TreeFunctions {
     }
 
     template<typename T>
-    void bfsTraversal(Node<T>* ptrStartingNode) {
+    void bfsTraversal(Node<T>* ptrStartingNode, T value) {
         if (ptrStartingNode == nullptr)
             return;
 
@@ -59,8 +59,11 @@ namespace TreeFunctions {
 
         ptrRear = ptrFront = ptrStartingNode;
 
-        while  (ptrFront != nullptr) {
-            cout << ptrFront->payload << " ";
+        while(ptrFront != nullptr) {
+            if(ptrFront->payload == value) {
+                cout << "Number " << value << " is in the tree!" << endl;
+                return;
+            }
 
             if  (ptrFront->ptrLeft != nullptr) {
                 ptrRear->ptrNext = ptrFront->ptrLeft;
@@ -76,30 +79,52 @@ namespace TreeFunctions {
     }
 
     template<typename T>
-    void traversePreOrder(Node<T>* ptrStartingNode) {
+    bool traversePreOrder(Node<T>* ptrStartingNode, T value) {
         if(ptrStartingNode != nullptr) {
-            cout << " " << ptrStartingNode->iPayload;
-            traversePreOrder(ptrStartingNode->ptrLeft);
-            traversePreOrder(ptrStartingNode->ptrRight);
+            if(ptrStartingNode->payload == value) {
+                cout << "Number " << value << " is in the tree!" << endl;
+                return true;
+            }
+
+            if (traversePreOrder(ptrStartingNode->ptrLeft, value))
+                return true;
+            if (traversePreOrder(ptrStartingNode->ptrRight, value))
+                return true;
         }
+        return false;
     }
 
     template<typename T>
-    void traverseInOrder(Node<T>* ptrStartingNode) {
+    bool traverseInOrder(Node<T>* ptrStartingNode, T value) {
         if(ptrStartingNode != nullptr) {
-            traverseInOrder(ptrStartingNode->ptrLeft);
-            cout << " " << ptrStartingNode->iPayload;
-            traverseInOrder(ptrStartingNode->ptrRight);
+            if (traverseInOrder(ptrStartingNode->ptrLeft, value))
+                return true;
+
+            if(ptrStartingNode->payload == value) {
+                cout << "Number " << value << " is in the tree!" << endl;
+                return true;
+            }
+
+            if (traverseInOrder(ptrStartingNode->ptrRight, value))
+                return true;
         }
+        return false;
     }
 
     template<typename T>
-    void traversePostOrder(Node<T>* ptrStartingNode) {
+    bool traversePostOrder(Node<T>* ptrStartingNode, T value) {
         if(ptrStartingNode != nullptr) {
-            traversePostOrder(ptrStartingNode->ptrLeft);
-            traversePostOrder(ptrStartingNode->ptrRight);
-            cout << " " << ptrStartingNode->iPayload;
+            if (traversePostOrder(ptrStartingNode->ptrLeft, value))
+                return true;
+            if (traversePostOrder(ptrStartingNode->ptrRight, value))
+                return true;
+
+            if(ptrStartingNode->payload == value) {
+                cout << "Number " << value << " is in the tree!" << endl;
+                return true;
+            }
         }
+        return false;
     }
 
 }

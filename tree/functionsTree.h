@@ -23,16 +23,16 @@ namespace TreeFunctions {
     int treeHeight(Node<T>* ptrStartingNode);
 
     template<typename T>
-    void bfsTraversal(Node<T>* ptrStartingNode);
+    void bfsTraversal(Node<T>* ptrStartingNode, T value);
 
     template<typename T>
-    void traversePreOrder(Node<T>* ptrStartingNode);
+    bool traversePreOrder(Node<T>* ptrStartingNode, T value);
 
     template<typename T>
-    void traverseInOrder(Node<T>* ptrStartingNode);
+    bool traverseInOrder(Node<T>* ptrStartingNode, T value);
 
     template<typename T>
-    void traversePostOrder(Node<T>* ptrStartingNode);
+    bool traversePostOrder(Node<T>* ptrStartingNode, T value);
 
 
 }
